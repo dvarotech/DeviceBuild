@@ -12,6 +12,7 @@ Write-Host "Configuring power options to prevent sleep and display timeout when 
 powercfg -change -standby-timeout-ac 0
 powercfg -change -monitor-timeout-ac 0
 Write-Host "Power options successfully configured." -ForegroundColor Green
+################################################################################################################
 
 # Fast Startup
 Write-Host "Disabling Fast Startup for improved system performance." -ForegroundColor Yellow
@@ -32,13 +33,6 @@ foreach ($adapter in $adapters) {
 Write-Host "IPv6 has been disabled on all network adapters." -ForegroundColor Green
 ################################################################################################################
 
-# Runs Dell updates
-Write-Host "Initiating Dell Command Update to scan and apply updates." -ForegroundColor Yellow
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe"  /scan
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /applyUpdates
-Write-Host "Dell updates have been successfully installed." -ForegroundColor Green
-################################################################################################################
-
 # Winget configuration
 Write-Host "Configuring Winget and enabling Microsoft Store for application installations." -ForegroundColor Yellow
 Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
@@ -52,8 +46,15 @@ $apps = @(
     "Dell.CommandUpdate.Universal",
     "Microsoft.Edge",
     "Google.Chrome",
+    "Mozilla.Firefox",
+    "Greenshot.Greenshot",
+    "Microsoft.Teams",
+    "Adobe.Acrobat.Reader.64-bit",
+    "7zip.7zip",
+    "WatchGuard.MobileVPNWithSSLClient",
     "VideoLAN.VLC",
-    "Mozilla.Firefox"
+    "Microsoft.OneDrive",
+    "Microsoft.Office"
 )
 
 # Loop through the apps and install each one
@@ -69,6 +70,17 @@ foreach ($app in $apps) {
 Write-Host "All specified applications have been installed." -ForegroundColor Green
 ################################################################################################################
 
+# Runs Dell updates
+Write-Host "Initiating Dell Command Update to scan and apply updates." -ForegroundColor Yellow
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="C:\Users\david.vaughan\OneDrive - ARO\Desktop\DellUpdateSettings.xml"
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="C:\Users\david.vaughan\OneDrive - ARO\Desktop\DellUpdateSettings.xml"
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /scan  -outputLog="C:\DellUpdateLog.log"
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /applyUpdates -autoSuspendBitLocker=enable 
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /scan
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /applyUpdates /quiet
+
+################################################################################################################
+
 # Check & install Windows updates.
 Write-Host "Checking for and installing Windows updates." -ForegroundColor Yellow
 usoclient StartScan
@@ -80,6 +92,7 @@ Import-Module PSWindowsUpdate
 Get-WindowsUpdate
 Install-WindowsUpdate -AcceptAll
 Write-Host "Windows updates have been successfully installed." -ForegroundColor Green
+################################################################################################################
 
 # Open System Properties for hostname change and domain join
 Write-Host "Opening System Properties for hostname change and domain join." -ForegroundColor Yellow
@@ -99,5 +112,8 @@ Start-Sleep -Milliseconds 500  # Wait a moment
 Start-Sleep -Seconds 5
 ################################################################################################################
 
+# To enable UAC
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLUA" -Value 1
+################################################################################################################
 # Final message indicating installation completion
 Write-Host "The installation is complete. Please join the computer to the Domain and log on the user to complete setup." -ForegroundColor Green
