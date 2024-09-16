@@ -72,12 +72,10 @@ Write-Host "All specified applications have been installed." -ForegroundColor Gr
 
 # Runs Dell updates
 
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/dvarotech/DeviceBuild/main/DellUpdateSettings.xml -OutFile C:\DellUpdateSettings.xml
-
 Write-Host "Initiating Dell Command Update to scan and apply updates." -ForegroundColor Yellow
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="C:\DellUpdateSettings.xml"
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="C:\DellUpdateSettings.xml"
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /scan -outputLog="C:\DellUpdateLog.log"
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="D:\DellUpdateSettings.xml"
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="D:\DellUpdateSettings.xml"
+& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /scan -outputLog="D:\DellUpdateLog.log"
 & "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /applyUpdates -autoSuspendBitLocker=enable 
 & "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /scan
 & "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /applyUpdates /quiet
