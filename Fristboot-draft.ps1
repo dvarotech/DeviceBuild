@@ -1,5 +1,5 @@
 # Starting the script with a descriptive message
-Write-Host "Starting ARO Internal IT - Windows 11 End User Device Configuration." -ForegroundColor White
+Write-Host "Starting Internal IT - Windows 11 End User Device Configuration." -ForegroundColor White
 
 # Check if running as Administrator
 If (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
