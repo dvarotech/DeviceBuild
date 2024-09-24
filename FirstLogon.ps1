@@ -52,4 +52,6 @@ powercfg /change hibernate-timeout-ac 60
 
 Start-Process "sysdm.cpl"
 
-Write-Host "The installation is complete. Please join the computer to the Domain and log on the user to complete setup." -ForegroundColor Green
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.MessageBox]::Show("The installation has been successfully completed. Please join the computer to the Domain and log in the user to finalise the setup.", "Installation Complete", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+
