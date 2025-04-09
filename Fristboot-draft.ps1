@@ -1,11 +1,16 @@
-# Starting the script with a descriptive message
-Write-Host "Starting Internal IT - Windows 11 End User Device Configuration." -ForegroundColor White
-
 # Check if running as Administrator
 If (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {
     Write-Host "This script requires Administrator privileges. Please run as Administrator." -ForegroundColor Red
 }
+
+# Starting the script with a descriptive message
+Write-Host "Starting Internal IT - Windows 11 End User Device Configuration." -ForegroundColor White
+
+# Install Datto agent
+Write-Host Installing Datto agent." -ForegroundColor Yellow
+(New-Object System.Net.WebClient).DownloadFile("https://merlot.centrastage.net/csm/profile/downloadAgent/513d13b1-2a61-460f-8f2a-730c64acb7c4", "$env:TEMP/AgentInstall.exe");start-process "$env:TEMP/AgentInstall.exe"
+
 ################################################################################################################
 # Never Sleep and Display to Stay On (Plugged In)
 Write-Host "Configuring power options to prevent sleep and display timeout when plugged in." -ForegroundColor Yellow
@@ -39,11 +44,11 @@ Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller
 Add-AppPackage -path "https://cdn.winget.microsoft.com/cache/source.msix."
 Add-AppPackage -path "https://aka.ms/getwinget"
 Write-Host "Winget has been successfully configured." -ForegroundColor Green
-
+cls
 # List of applications to install
 Write-Host "Installing applications: Edge, Chrome, and Firefox." -ForegroundColor Yellow
 $apps = @(
-    "Dell.CommandUpdate.Universal",
+    "Dell.CommandUpdate",
     "Microsoft.Edge",
     "Google.Chrome",
     "Mozilla.Firefox",
@@ -73,9 +78,6 @@ Write-Host "All specified applications have been installed." -ForegroundColor Gr
 # Runs Dell updates
 
 Write-Host "Initiating Dell Command Update to scan and apply updates." -ForegroundColor Yellow
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="D:\DellUpdateSettings.xml"
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /importsettings="D:\DellUpdateSettings.xml"
-& "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /scan -outputLog="D:\DellUpdateLog.log"
 & "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /applyUpdates -autoSuspendBitLocker=enable 
 & "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /scan
 & "C:\Program Files\Dell\CommandUpdate\dcu-cli.exe" /applyUpdates /quiet
