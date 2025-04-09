@@ -112,5 +112,5 @@ Start-Sleep -Seconds 5
 # To enable UAC
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLUA" -Value 1
 ################################################################################################################
-# Final message indicating installation completion
-Write-Host "The installation is complete. Please join the computer to the Domain and log on the user to complete setup." -ForegroundColor Green
+
+
